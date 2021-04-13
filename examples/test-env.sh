@@ -1,3 +1,3 @@
-export QINIU_ACCESS_KEY=your access key
-export QINIU_SECRET_KEY=your secret key
-export QINIU_TEST_BUCKET=your bucket
+export QINIU_ACCESS_KEY="4_odedBxmrAHiu4Y0Qp0HPG0NANCf6VAsAjWL_k9"
+export QINIU_SECRET_KEY="SrRuUVfDX6drVRvpyN8mv8Vcm9XnMZzlbDfvVfMe"
+export QINIU_TEST_BUCKET="sdk"
