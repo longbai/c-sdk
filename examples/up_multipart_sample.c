@@ -24,11 +24,10 @@ int main(int argc, char **argv)
     Qiniu_Multipart_PutExtra putExtra;
     Qiniu_Zero(client); //must initial memory,otherwise will use random ptr;
 
-    char *accessKey = "4_odedBxmrAHiu4Y0Qp0HPG0NANCf6VAsAjWL_k9";
-    char *secretKey = "SrRuUVfDX6drVRvpyN8mv8Vcm9XnMZzlbDfvVfMe";
-    char *bucket = "sdk";
+    char *accessKey = getenv("QINIU_ACCESS_KEY");
+    char *secretKey = getenv("QINIU_SECRET_KEY");
+    char *bucket = getenv("QINIU_TEST_BUCKET");
     char *key = "testkey";
-    char *localFile = "./test5m.mp3";
 
     Qiniu_Mac mac;
     mac.accessKey = accessKey;
@@ -51,8 +50,8 @@ int main(int argc, char **argv)
     char *uptoken = Qiniu_RS_PutPolicy_Token(&putPolicy, &mac);
 
     Qiniu_Client_InitMacAuth(&client, 1024, &mac);
-
-    Qiniu_Error error = Qiniu_Multipart_PutFile(&client, uptoken, key, localFile, &putExtra, &putRet);
+    Qiniu_RS_Delete(&client, bucket, key);
+    Qiniu_Error error = Qiniu_Multipart_PutFile(&client, uptoken, key, __FILE__, &putExtra, &putRet);
     if (error.code != 200)
     {
         printf("upload file %s:%s error.\n", bucket, key);
@@ -60,7 +59,6 @@ int main(int argc, char **argv)
     }
     else
     {
-        /*200, 正确返回了, 你可以通过statRet变量查询一些关于这个文件的信息*/
         printf("upload file success dstbucket:%s, dstKey:%s, hash:%s \n\n", bucket, putRet.key, putRet.hash);
     }
 
@@ -70,9 +68,10 @@ int main(int argc, char **argv)
 
 void setLocalHost()
 {
+#ifdef LOCAL_DEBUG_MODE //dedicated for qiniu maintainer
     QINIU_RS_HOST = "http://127.0.0.1:9400";
-    QINIU_RSF_HOST = "http://127.0.0.1:10500";
-    QINIU_API_HOST = "http://127.0.0.1:12500";
     QINIU_UP_HOST = "http://127.0.0.1:11200";
-    QINIU_IOVIP_HOST = "http://127.0.0.1:9200";
+#else
+    Qiniu_Use_Zone_Huadong(false);
+#endif
 }
