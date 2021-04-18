@@ -30,7 +30,7 @@ SOURCE_FILES=\
 CUNIT_LIB=../CUnit/CUnit/Sources/.libs
 
 all: $(SOURCE_FILES)
-	gcc -g $^ -o qiniutest -L$(CUNIT_LIB) $(INCLUDE_PATH) $(LINK_PATH) -lcurl -lssl -lcrypto -lcunit -lm
+	gcc -g $^ -o qiniutest -L$(CUNIT_LIB) $(INCLUDE_PATH) $(LINK_PATH) -lcurl -lssl -lcrypto -lcunit -lm -ldl
 
 install: all
 	@echo
@@ -39,6 +39,5 @@ clean:
 	rm -f test
 
 test: all
-	#cp ../CUnit/CUnit/Sources/.libs/libcunit.1.dylib /usr/local/lib/libcunit.1.dylib
 	LD_LIBRARY_PATH=$(CUNIT_LIB) ./qiniutest
 
